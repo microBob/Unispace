@@ -36,7 +36,7 @@ jobs:
         run: pnpm install
 
       - name: 📝 Format Code
-        run: biome format --write .
+        run: pnpm format
 
       - name: ✅ Commit code format changes
         uses: stefanzweifel/git-auto-commit-action@v5
@@ -46,7 +46,7 @@ jobs:
           skip_checkout: true
 
       - name: 🧶 Lint
-        run: biome lint --write .
+        run: pnpm lint
 
       - name: 🔍 Svelte-Check
         run: pnpm sv-check

@@ -11,6 +11,8 @@
 		"build:chrome": "wxt build",
 		"zip:chrome": "wxt zip",
 		"zip": "wxt zip -b firefox",
+		"format": "biome format --write .",
+		"lint": "biome lint --write .",
 		"sv-check": "svelte-check --tsconfig ./tsconfig.json",
 		"check": "biome check --write . && pnpm sv-check",
 		"postinstall": "wxt prepare"
