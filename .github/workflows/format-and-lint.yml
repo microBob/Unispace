@@ -32,8 +32,8 @@ jobs:
           node-version: "latest"
           cache: "pnpm"
           
-      - name: 🔧 Install dev dependencies
-        run: pnpm install -D
+      - name: 🔧 Install Dependencies
+        run: pnpm install
 
       - name: 📝 Format Code
         run: biome format --write .
