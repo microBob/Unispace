@@ -21,14 +21,23 @@ jobs:
           ref: ${{ github.head_ref }}
           token: ${{ secrets.WORKFLOW_COMMIT }}
 
-      - name: 🥟 Install Bun
-        uses: oven-sh/setup-bun@v2
+      - name: 📦 Install pnpm
+        uses: pnpm/action-setup@v4
         with:
-          bun-version: latest
+          version: 9
+          
+      - name: 📦 Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "latest"
+          cache: "pnpm"
+          
+      - name: 🔧 Install dev dependencies
+        run: pnpm install -D
 
       - name: 📝 Format Code
-        run: bunx biome format --write .
-        
+        run: biome format --write .
+
       - name: ✅ Commit code format changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
@@ -37,7 +46,7 @@ jobs:
           skip_checkout: true
 
       - name: 🧶 Lint
-        run: bunx biome lint --write .
-      
+        run: biome lint --write .
+
       - name: 🔍 Svelte-Check
-        run: bun run sv-check
+        run: pnpm sv-check
