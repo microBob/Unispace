@@ -5,13 +5,16 @@
 	"version": "0.0.0",
 	"type": "module",
 	"scripts": {
-		"dev": "wxt",
-		"dev:firefox": "wxt -b firefox",
-		"build": "wxt build",
-		"build:firefox": "wxt build -b firefox",
-		"zip": "wxt zip",
-		"zip:firefox": "wxt zip -b firefox",
-		"check": "svelte-check --tsconfig ./tsconfig.json",
+		"dev": "wxt -b firefox",
+		"dev:chrome": "wxt",
+		"build": "wxt build -b firefox",
+		"build:chrome": "wxt build",
+		"zip:chrome": "wxt zip",
+		"zip": "wxt zip -b firefox",
+		"format": "biome format --write .",
+		"lint": "biome lint --write .",
+		"sv-check": "svelte-check --tsconfig ./tsconfig.json",
+		"check": "biome check --write . && pnpm sv-check",
 		"postinstall": "wxt prepare"
 	},
 	"devDependencies": {
