@@ -13,7 +13,11 @@ const _schema = i.schema({
       email: i.string().unique().indexed(),
     }),
 
-    // Root bookmark node for a bookmarks bar.
+    /**
+     * Root bookmark node for a bookmarks bar.
+     *
+     * @param bookmarks - The root bookmark node for a bookmarks bar.
+     */
     bookmarksBar: i.entity({
       bookmarks: i.json<Bookmarks.BookmarkTreeNode>().unique().indexed(),
     }),
