@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@instantdb/core':
-        specifier: ^0.16.7
-        version: 0.16.7
+        specifier: ^0.17.0
+        version: 0.17.0
     devDependencies:
       '@biomejs/biome':
         specifier: 1.9.4
@@ -432,8 +432,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@instantdb/core@0.16.7':
-    resolution: {integrity: sha512-oYTT26YfyNp6bx2CRhzgfOTbduNfzUbKGIrH6hViz0BUIC2/Mi4vyZSxigf5shvgCuCeBrDVqqZYE9VsCWlKXQ==}
+  '@instantdb/core@0.17.0':
+    resolution: {integrity: sha512-QabM7zFiuo1l2VMS1URJmIrGgr+9hz30cWaF17T/9EQ7Tjer4nCKPPcJ53lQtCq/1ZVxkhWztb7do1tpU3nvBA==}
 
   '@jridgewell/gen-mapping@0.3.8':
     resolution: {integrity: sha512-imAbBGkb+ebQyxKgzv5Hu2nmROxoDOXHh80evxdoXNOrvAnVx7zimzc1Oo5h9RlfV4vPXaE2iM5pOFbvOCClWA==}
@@ -2648,7 +2648,7 @@ snapshots:
   '@esbuild/win32-x64@0.24.0':
     optional: true
 
-  '@instantdb/core@0.16.7':
+  '@instantdb/core@0.17.0':
     dependencies:
       mutative: 1.1.0
       uuid: 9.0.1
