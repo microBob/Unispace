@@ -33,8 +33,10 @@ Synchonized tab workspaces and bookmarks manager web extension.
    pnpx instant-cli login
    ```
 
-3. If you're using your own InstantDB instance, create an app and push the setup to it:
+3. Push the InstantDB schema and permissions. This operation will also copy the app ID to `.env`:
 
    ```bash
    pnpm push-instant
    ```
+
+4. In `.env`, create a `WXT_INSTANT_APP_ID` variable below `PUBLIC_INSTANT_APP_ID` and copy down the app ID.

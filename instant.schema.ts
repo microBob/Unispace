@@ -36,7 +36,7 @@ const _schema = i.schema({
      */
     workspace: i.entity({
       name: i.string().unique().indexed(),
-      icon: i.string(),
+      icon: i.string().optional(),
       color: i.string().optional(),
       defaultContainer: i.string().optional(),
       tabs: i.json<Array<TimestampedTab>>().optional(),
