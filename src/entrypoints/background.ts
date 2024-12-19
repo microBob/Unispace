@@ -1,4 +1,4 @@
-import { init, id } from "@instantdb/core";
+import { id, init } from "@instantdb/core";
 import schema from "~/../instant.schema";
 
 export default defineBackground(() => {
