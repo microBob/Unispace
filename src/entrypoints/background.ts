@@ -8,17 +8,10 @@ export default defineBackground(() => {
     appId: import.meta.env.WXT_INSTANT_APP_ID,
     schema,
   });
-
-  // 2. Establish state.
-  let workspaces: Workspace[] = [];
-  let activeWorkspaceIndex = 0;
-
-  // 3. Pull current state from the database.
-  db.queryOnce({ workspaceSet: {} }).then((response) => {
-    const worksapceSet: WorkspaceSet = response.data.workspaceSet;
-    workspaces = worksapceSet.workspaces;
-    activeWorkspaceIndex = worksapceSet.activeWorkspaceIndex;
-  });
+  
+  // 2. Establish active workspace ID.
+  let activeWorkspaceId: string;
+  db.queryOnce({workspaceSet: {}})
 
   // 2. Subscribe to tab changes.
   browser.tabs.onUpdated.addListener((tab) => {
