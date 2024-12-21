@@ -4,11 +4,11 @@ import "./app.css";
 
 const appElement = document.getElementById("app");
 if (!appElement) {
-	throw new Error("Failed to get app element");
+  throw new Error("Failed to get app element");
 }
 
 const app = mount(App, {
-	target: appElement,
+  target: appElement,
 });
 
 export default app;

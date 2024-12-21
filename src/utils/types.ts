@@ -1,10 +1,28 @@
 import type { Tabs } from "wxt/browser";
 
 /**
- * Add last used attribute to @link Tabs.Tab.
+ * Tab workspace.
  *
- * @param lastUsed - Date object marking when the tab was last used.
+ * @remarks
+ * A workspace is a collection of tabs and a link to a bookmarks bar.
+ *
+ * @param name - Name of the workspace.
+ * @param icon - Image URL for the icon.
+ * @param color - Color for the workspace.
+ * @param defaultContainer - Default container for new tabs.
+ * @param tabs - Ordered list of tabs in the workspace.
  */
-export interface TimestampedTab extends Tabs.Tab {
-	lastUsed: Date;
+export interface Workspace {
+  id: string;
+  name: string;
+  icon?: string;
+  color?: string;
+  tabs: Tabs.Tab[];
+}
+
+export interface WorkspaceSet {
+  id: string;
+  name: string;
+  workspaces: string[];
+  activeWorkspaceIndex: number;
 }

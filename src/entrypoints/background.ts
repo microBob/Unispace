@@ -1,20 +1,34 @@
-import { id, init } from "@instantdb/core";
-import schema from "~/../instant.schema";
+import { DataManager } from "@/lib/data_manager";
+import schema from "@@/instant.schema";
+import { init } from "@instantdb/core";
 
 export default defineBackground(() => {
-	console.log("Hello background!", { id: browser.runtime.id });
+  // 1. Connect to InstantDB.
+  const db = init({
+    appId: import.meta.env.WXT_INSTANT_APP_ID,
+    schema,
+  });
 
-	// 1. Connect to InstantDB.
-	const db = init({
-		appId: import.meta.env.WXT_INSTANT_APP_ID,
-		schema,
-	});
+  // 2. Instantiate data manager.
+  const dataManager = new DataManager(db);
 
-	console.log(
-		db.transact(db.tx.workspace[id()].update({ name: "Test Workspace" })),
-	);
-
-	browser.tabs.onCreated.addListener((tab) => {
-		console.log("Tab created", tab);
-	});
+  // 3. Subscribe to tab changes.
+  browser.tabs.onAttached.addListener(async () =>
+    dataManager.updateActiveWorkspaceTabs(),
+  );
+  browser.tabs.onCreated.addListener(async () =>
+    dataManager.updateActiveWorkspaceTabs(),
+  );
+  browser.tabs.onDetached.addListener(async () =>
+    dataManager.updateActiveWorkspaceTabs(),
+  );
+  browser.tabs.onMoved.addListener(async () =>
+    dataManager.updateActiveWorkspaceTabs(),
+  );
+  browser.tabs.onRemoved.addListener(async () =>
+    dataManager.updateActiveWorkspaceTabs(),
+  );
+  browser.tabs.onUpdated.addListener(async () =>
+    dataManager.updateActiveWorkspaceTabs(),
+  );
 });
