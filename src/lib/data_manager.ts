@@ -1,6 +1,6 @@
-import type { WorkspaceSet } from "@/utils/types";
 import type { AppSchema } from "@@/instant.schema";
 import { type InstantCoreDatabase, id } from "@instantdb/core";
+import type { Tabs } from "wxt/browser";
 
 export class DataManager {
   private readonly db: InstantCoreDatabase<AppSchema>;
@@ -65,5 +65,29 @@ export class DataManager {
       }),
     );
     return { workspaceId, workspaceSetId };
+  }
+
+  /**
+   * Overwrite the workspace's tabs with the current window's tabs.
+   */
+  async updateWorkspaceTabs(workspaceId: string) {
+    // Get current window tabs.
+    const currentWindowTabs = await browser.tabs.query({ currentWindow: true });
+    console.log(currentWindowTabs);
+
+    // Update workspace tabs.
+    this.db.transact(
+      this.db.tx.workspace[workspaceId].update({
+        tabs: currentWindowTabs as Tabs.Tab[],
+      }),
+    );
+  }
+
+  /**
+   * Overwrite active workspace's tabs with the current window's tabs
+   */
+  async updateActiveWorkspaceTabs() {
+    const activeWorkspaceId = await this.getActiveWorkspaceId();
+    this.updateWorkspaceTabs(activeWorkspaceId);
   }
 }

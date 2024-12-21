@@ -2,7 +2,7 @@ import { DataManager } from "@/lib/data_manager";
 import schema from "@@/instant.schema";
 import { init } from "@instantdb/core";
 
-export default defineBackground(async () => {
+export default defineBackground(() => {
   // 1. Connect to InstantDB.
   const db = init({
     appId: import.meta.env.WXT_INSTANT_APP_ID,
@@ -11,11 +11,25 @@ export default defineBackground(async () => {
 
   // 2. Instantiate data manager.
   const dataManager = new DataManager(db);
-  
-  console.log(await dataManager.getActiveWorkspaceId());
 
-  // 2. Subscribe to tab changes.
-  browser.tabs.onUpdated.addListener((tab) => {
-    console.log("Tab changed", tab);
-  });
+  // 3. Subscribe to tab changes.
+  // browser.tabs.onActivated.addListener(dataManager.updateActiveWorkspaceTabs);
+  browser.tabs.onAttached.addListener(async () =>
+    dataManager.updateActiveWorkspaceTabs(),
+  );
+  browser.tabs.onCreated.addListener(async () =>
+    dataManager.updateActiveWorkspaceTabs(),
+  );
+  browser.tabs.onDetached.addListener(async () =>
+    dataManager.updateActiveWorkspaceTabs(),
+  );
+  browser.tabs.onMoved.addListener(async () =>
+    dataManager.updateActiveWorkspaceTabs(),
+  );
+  browser.tabs.onRemoved.addListener(async () =>
+    dataManager.updateActiveWorkspaceTabs(),
+  );
+  browser.tabs.onUpdated.addListener(async () =>
+    dataManager.updateActiveWorkspaceTabs(),
+  );
 });
