@@ -1,5 +1,9 @@
 import type { Tabs } from "wxt/browser";
 
+export interface WorkspaceTab extends Tabs.Tab {
+  workspaceId: string;
+}
+
 /**
  * Tab workspace.
  *
@@ -17,7 +21,7 @@ export interface Workspace {
   name: string;
   icon?: string;
   color?: string;
-  tabs: Tabs.Tab[];
+  tabs: WorkspaceTab[];
 }
 
 export interface WorkspaceSet {
