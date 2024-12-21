@@ -11,7 +11,7 @@ const _schema = i.schema({
     $users: i.entity({
       email: i.string().unique().indexed(),
     }),
-    
+
     workspace: i.entity({
       id: i.string().unique().indexed(),
       name: i.string().unique(),
@@ -19,7 +19,7 @@ const _schema = i.schema({
       color: i.string().optional(),
       tabs: i.json<Tabs.Tab[]>(),
     }),
-    
+
     workspaceSet: i.entity({
       id: i.string().unique().indexed(),
       name: i.string().unique(),
