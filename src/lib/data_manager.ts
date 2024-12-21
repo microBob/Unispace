@@ -2,8 +2,13 @@ import type { AppSchema } from "@@/instant.schema";
 import { type InstantCoreDatabase, id } from "@instantdb/core";
 import type { Tabs } from "wxt/browser";
 
+/**
+ * Handle interactions with the database.
+ */
 export class DataManager {
+  /** InstantDB connection. */
   private readonly db: InstantCoreDatabase<AppSchema>;
+
   constructor(db: InstantCoreDatabase<AppSchema>) {
     this.db = db;
   }

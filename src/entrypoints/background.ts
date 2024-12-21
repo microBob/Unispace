@@ -13,7 +13,6 @@ export default defineBackground(() => {
   const dataManager = new DataManager(db);
 
   // 3. Subscribe to tab changes.
-  // browser.tabs.onActivated.addListener(dataManager.updateActiveWorkspaceTabs);
   browser.tabs.onAttached.addListener(async () =>
     dataManager.updateActiveWorkspaceTabs(),
   );
