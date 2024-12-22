@@ -1,7 +1,7 @@
 // Docs: https://www.instantdb.com/docs/schema
 
 import { i } from "@instantdb/core";
-import type { WorkspaceTab } from "@/utils/types";
+import type { Tabs } from "wxt/browser";
 
 const _schema = i.schema({
   // This section lets you define entities: think `posts`, `comments`, etc
@@ -17,7 +17,7 @@ const _schema = i.schema({
       name: i.string().unique(),
       icon: i.string().optional(),
       color: i.string().optional(),
-      tabs: i.json<WorkspaceTab[]>(),
+      tabs: i.json<Tabs.Tab[]>(),
     }),
 
     workspaceSet: i.entity({
