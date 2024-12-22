@@ -1,4 +1,5 @@
 import { DataManager } from "@/lib/data_manager";
+import { TabManager } from "@/lib/tab_manager";
 import schema from "@@/instant.schema";
 import { init } from "@instantdb/core";
 
@@ -12,23 +13,9 @@ export default defineBackground(() => {
   // 2. Instantiate data manager.
   const dataManager = new DataManager(db);
 
-  // 3. Subscribe to tab changes.
-  browser.tabs.onAttached.addListener(async () =>
-    dataManager.updateActiveWorkspaceTabs(),
-  );
-  browser.tabs.onCreated.addListener(async () =>
-    dataManager.updateActiveWorkspaceTabs(),
-  );
-  browser.tabs.onDetached.addListener(async () =>
-    dataManager.updateActiveWorkspaceTabs(),
-  );
-  browser.tabs.onMoved.addListener(async () =>
-    dataManager.updateActiveWorkspaceTabs(),
-  );
-  browser.tabs.onRemoved.addListener(async () =>
-    dataManager.updateActiveWorkspaceTabs(),
-  );
-  browser.tabs.onUpdated.addListener(async () =>
-    dataManager.updateActiveWorkspaceTabs(),
-  );
+  // 3. Instantiate tab manager.
+  const tabManager = new TabManager(dataManager);
+  
+  // 4. Subscribe to tab changes.
+  tabManager.subscribeToTabChanges();
 });
