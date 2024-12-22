@@ -38,6 +38,33 @@ export class DataManager {
     return firstWorkspaceSet.workspaces[firstWorkspaceSet.activeWorkspaceIndex];
   }
 
+  /**
+   * Get tabs for a workspace.
+   *
+   * @remarks
+   * This assumes there is only one workspace set.
+   *
+   * @throws Error if workspace doesn't exist.
+   *
+   * @returns Array of tabs in the workspace.
+   */
+  async getWorkspaceTabs(workspaceId: string): Promise<Tabs.Tab[]> {
+    // Query for workspace.
+    const workspaceResponse = await this.db.queryOnce({
+      workspace: {
+        id: workspaceId,
+      },
+    });
+
+    // Throw error if workspace doesn't exist.
+    if (workspaceResponse.data.workspace.length === 0) {
+      throw new Error(`Workspace with ID ${workspaceId} does not exist.`);
+    }
+
+    // Return tabs.
+    return workspaceResponse.data.workspace[0].tabs;
+  }
+
   // Setters:
 
   /**

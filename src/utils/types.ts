@@ -22,7 +22,6 @@ export interface Workspace {
 
 export interface WorkspaceSet {
   id: string;
-  name: string;
   workspaces: string[];
   activeWorkspaceIndex: number;
 }

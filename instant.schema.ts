@@ -22,7 +22,6 @@ const _schema = i.schema({
 
     workspaceSet: i.entity({
       id: i.string().unique().indexed(),
-      name: i.string().unique(),
       workspaces: i.json<string[]>(),
       activeWorkspaceIndex: i.number(),
     }),
