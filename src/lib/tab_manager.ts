@@ -27,13 +27,13 @@ export class TabManager {
     const tabs = await browser.tabs.query({ currentWindow: true });
     const tabIds = tabs.map((tab) => tab.id).filter((id) => id !== undefined);
 
-    // 2. Recreate tabs in the active workspace.
-    const activeWorkspaceTabs = await this.dataManager.getWorkspaceTabs(
-      await this.dataManager.getActiveWorkspaceId(),
-    );
-    await this.createTabs(activeWorkspaceTabs);
-
-    // 3. Recreate tabs in the other workspaces, discarded.
+    // 2. Recreate tabs (in the data, there should only be one active tab).
+    const workspaceIds = await this.dataManager.getWorkspaceIds();
+    for (const workspaceId of workspaceIds) {
+      await this.createTabs(
+        await this.dataManager.getWorkspaceTabs(workspaceId),
+      );
+    }
 
     // 4. Delete all old tabs in the window.
     browser.tabs.remove(tabIds);
@@ -42,15 +42,15 @@ export class TabManager {
   /**
    * Create the given array of tabs.
    *
-   * @param setInactive Should these tabs be created inactive.
-   * @param setDiscarded Should these tabs be created already discarded.
+   * @remarks
+   * This will create new ID's and copy over all the other properties.
    */
-  async createTabs(tabs: Tabs.Tab[], setInactive = true, setDiscarded = false) {
+  async createTabs(tabs: Tabs.Tab[]) {
     for (const tab of tabs) {
       const createProperties: Tabs.CreateCreatePropertiesType = {
-        active: !setInactive || tab.active,
+        active: tab.active,
         cookieStoreId: tab.cookieStoreId,
-        discarded: setDiscarded || tab.discarded,
+        discarded: tab.discarded,
         index: tab.index,
         muted: tab.mutedInfo?.muted,
         openerTabId: tab.openerTabId,

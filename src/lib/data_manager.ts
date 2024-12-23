@@ -18,24 +18,46 @@ export class DataManager {
   /**
    * Get the active workspace ID.
    *
-   * @remarks
-   * If no workspace set exists, a default workspace set is created.
+   * @throws Error if no workspace set exists.
    */
   async getActiveWorkspaceId(): Promise<string> {
     // Query for workspace sets.
-    const allWorkspaceSetsResponse = await this.db.queryOnce({
+    const workspaceSetsResponse = await this.db.queryOnce({
       workspaceSet: {},
     });
-    const workspaceSets = allWorkspaceSetsResponse.data.workspaceSet;
+    const workspaceSets = workspaceSetsResponse.data.workspaceSet;
 
-    // Create default workspace set if it doesn't exist.
+    // Throw error if no workspace set exist.
     if (workspaceSets.length === 0) {
-      return this.createWorkspaceSet("Default Workspace Set").workspaceId;
+      throw new Error(
+        "Can't get active workspace ID. No workspace set exists.",
+      );
     }
 
     // Otherwise, pull from the first workspace set (for now).
     const firstWorkspaceSet = workspaceSets[0];
     return firstWorkspaceSet.workspaces[firstWorkspaceSet.activeWorkspaceIndex];
+  }
+
+  /**
+   * Get all workspace ID's
+   *
+   * @throws Error if no workspace set exists.
+   */
+  async getWorkspaceIds(): Promise<string[]> {
+    // Query for workspace set.
+    const workspaceSetsResponse = await this.db.queryOnce({ workspaceSet: {} });
+    const workspaceSets = workspaceSetsResponse.data.workspaceSet;
+
+    // Throw error if no workspaces exist.
+    if (workspaceSets.length === 0) {
+      throw new Error(
+        "Can't get workspace ID's because none exist (no workspace set).",
+      );
+    }
+
+    // Otherwise, return their ID's.
+    return workspaceSets[0].workspaces;
   }
 
   /**
@@ -45,24 +67,23 @@ export class DataManager {
    * This assumes there is only one workspace set.
    *
    * @throws Error if workspace doesn't exist.
-   *
-   * @returns Array of tabs in the workspace.
    */
   async getWorkspaceTabs(workspaceId: string): Promise<Tabs.Tab[]> {
     // Query for workspace.
-    const workspaceResponse = await this.db.queryOnce({
+    const workspacesResponse = await this.db.queryOnce({
       workspace: {
         id: workspaceId,
       },
     });
+    const workspaces = workspacesResponse.data.workspace;
 
     // Throw error if workspace doesn't exist.
-    if (workspaceResponse.data.workspace.length === 0) {
+    if (workspaces.length === 0) {
       throw new Error(`Workspace with ID ${workspaceId} does not exist.`);
     }
 
     // Return tabs.
-    return workspaceResponse.data.workspace[0].tabs;
+    return workspaces[0].tabs;
   }
 
   // Setters:
@@ -70,33 +91,38 @@ export class DataManager {
   /**
    * Create a blank workspace with the given name.
    *
-   * @returns ID for the workspace.
+   * @returns ID of the created workspace.
    */
-  createWorkspace(name: string): string {
+  async createWorkspace(name: string): Promise<string> {
     const workspaceId = id();
-    this.db.transact(this.db.tx.workspace[workspaceId].update({ name: name }));
+    await this.db.transact(
+      this.db.tx.workspace[workspaceId].update({ name: name }),
+    );
     return workspaceId;
   }
 
   /**
    * Create a blank workspace set with a single workspace.
    *
-   * @returns The created workspace's ID and the workspace set's ID.
+   * @remarks
+   * This should only be used to help initialize a new user.
    */
-  createWorkspaceSet(name: string): {
-    workspaceId: string;
-    workspaceSetId: string;
-  } {
-    const workspaceId = this.createWorkspace("Workspace 1");
-    const workspaceSetId = id();
-    this.db.transact(
-      this.db.tx.workspaceSet[workspaceSetId].update({
-        name: name,
-        workspaces: [workspaceId],
+  async createWorkspaceSet() {
+    // Check if workspace sets exist.
+    const workspaceSetsResponse = await this.db.queryOnce({ workspaceSet: {} });
+
+    // Exit if workspace sets already exist.
+    if (workspaceSetsResponse.data.workspaceSet.length > 0) {
+      return;
+    }
+
+    // Create default workspace.
+    await this.db.transact(
+      this.db.tx.workspaceSet[id()].update({
+        workspaces: [await this.createWorkspace("Workspace 1")],
         activeWorkspaceIndex: 0,
       }),
     );
-    return { workspaceId, workspaceSetId };
   }
 
   /**
@@ -108,7 +134,7 @@ export class DataManager {
     console.log(currentWindowTabs);
 
     // Update workspace tabs.
-    this.db.transact(
+    await this.db.transact(
       this.db.tx.workspace[workspaceId].update({
         tabs: currentWindowTabs as Tabs.Tab[],
       }),
@@ -119,7 +145,6 @@ export class DataManager {
    * Overwrite active workspace's tabs with the current window's tabs
    */
   async updateActiveWorkspaceTabs() {
-    const activeWorkspaceId = await this.getActiveWorkspaceId();
-    this.updateWorkspaceTabs(activeWorkspaceId);
+    await this.updateWorkspaceTabs(await this.getActiveWorkspaceId());
   }
 }

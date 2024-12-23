@@ -15,11 +15,14 @@ export default defineBackground(() => {
 
   // 3. Instantiate tab manager.
   const tabManager = new TabManager(dataManager);
-  
-  // 4. Subscribe to tab changes.
-  browser.tabs.onRemoved.addListener(()=> {
-    console.log("Restore");
-    tabManager.restore();
-  })
-  // tabManager.subscribeToTabChanges();
+
+  // 4. Initialize the database for a new user (does nothing for returning).
+  dataManager.createWorkspaceSet().then(() => {
+    // 5. Subscribe to tab changes.
+    browser.tabs.onRemoved.addListener(() => {
+      console.log("Restore");
+      tabManager.restore();
+    });
+    // tabManager.subscribeToTabChanges();
+  });
 });
