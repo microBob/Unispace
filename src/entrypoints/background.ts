@@ -17,5 +17,9 @@ export default defineBackground(() => {
   const tabManager = new TabManager(dataManager);
   
   // 4. Subscribe to tab changes.
-  tabManager.subscribeToTabChanges();
+  browser.tabs.onRemoved.addListener(()=> {
+    console.log("Restore");
+    tabManager.restore();
+  })
+  // tabManager.subscribeToTabChanges();
 });
