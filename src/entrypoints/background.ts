@@ -18,11 +18,8 @@ export default defineBackground(() => {
 
   // 4. Initialize the database for a new user (does nothing for returning).
   dataManager.createWorkspaceSet().then(() => {
-    // 5. Subscribe to tab changes.
-    browser.tabs.onRemoved.addListener(() => {
-      console.log("Restore");
-      tabManager.restore();
-    });
+    // Restore active workspace.
+    tabManager.restore();
     // tabManager.subscribeToTabChanges();
   });
 });

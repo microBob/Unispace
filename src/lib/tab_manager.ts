@@ -22,8 +22,6 @@ export class TabManager {
    */
   async restore() {
     // 1. Get all tabs in the window (to be removed later).
-
-    // Get the IDs of all tabs in the window.
     const tabs = await browser.tabs.query({ currentWindow: true });
     const tabIds = tabs.map((tab) => tab.id).filter((id) => id !== undefined);
 
@@ -56,7 +54,6 @@ export class TabManager {
         openerTabId: tab.openerTabId,
         openInReaderMode: tab.isInReaderMode,
         pinned: tab.pinned,
-        title: tab.title,
         url: tab.url,
         windowId: browser.windows.WINDOW_ID_CURRENT,
       };

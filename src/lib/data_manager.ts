@@ -72,7 +72,11 @@ export class DataManager {
     // Query for workspace.
     const workspacesResponse = await this.db.queryOnce({
       workspace: {
-        id: workspaceId,
+        $: {
+          where: {
+            id: workspaceId,
+          },
+        },
       },
     });
     const workspaces = workspacesResponse.data.workspace;
