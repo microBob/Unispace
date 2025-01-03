@@ -43,6 +43,9 @@ export class DataManager {
    * Get all workspace ID's
    *
    * @throws Error if no workspace set exists.
+   *
+   * @returns
+   * Pulls the ordered list of ID's of the user's first workspace set.
    */
   async getWorkspaceIds(): Promise<string[]> {
     // Query for workspace set.
@@ -63,9 +66,6 @@ export class DataManager {
   /**
    * Get tabs for a workspace.
    *
-   * @remarks
-   * This assumes there is only one workspace set.
-   *
    * @throws Error if workspace doesn't exist.
    */
   async getWorkspaceTabs(workspaceId: string): Promise<Tabs.Tab[]> {
@@ -79,21 +79,23 @@ export class DataManager {
         },
       },
     });
-    const workspaces = workspacesResponse.data.workspace;
+    const matchingWorkspaces = workspacesResponse.data.workspace;
 
     // Throw error if workspace doesn't exist.
-    if (workspaces.length === 0) {
+    if (matchingWorkspaces.length === 0) {
       throw new Error(`Workspace with ID ${workspaceId} does not exist.`);
     }
 
-    // Return tabs.
-    return workspaces[0].tabs;
+    // Return tabs (there will be exactly 1 workspace).
+    return matchingWorkspaces[0].tabs;
   }
 
   // Setters:
 
   /**
    * Create a blank workspace with the given name.
+   *
+   * @param name - New name to give workspace.
    *
    * @returns ID of the created workspace.
    */
@@ -131,6 +133,8 @@ export class DataManager {
 
   /**
    * Overwrite the workspace's tabs with the current window's tabs.
+   *
+   * @param workspaceId - Workspace to update.
    */
   async updateWorkspaceTabs(workspaceId: string) {
     // Get current window tabs.

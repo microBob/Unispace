@@ -20,6 +20,8 @@ export default defineBackground(() => {
   dataManager.createWorkspaceSet().then(() => {
     // Restore active workspace.
     tabManager.restore();
-    // tabManager.subscribeToTabChanges();
+
+    // Start listening to tab changes.
+    tabManager.subscribeToTabChanges();
   });
 });
