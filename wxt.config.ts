@@ -7,13 +7,13 @@ export default defineConfig({
   modules: ["@wxt-dev/module-svelte"],
   manifest: {
     permissions: ["contextualIdentities", "cookies"],
-    "commands": {
-      "_execute_action": {
-        "suggested_key": {
-          "default": "Ctrl+Shift.",
-        },
-        "description": "Open Workspace Switcher"
-      }
+    commands: {
+      _execute_browser_action: {
+          suggested_key: {
+            default: "Ctrl+Shift+Period"
+          },
+          description: "Open Workspace Switcher"
+        }
     }
   },
 });
