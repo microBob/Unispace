@@ -17,11 +17,13 @@ export default defineBackground(() => {
   const tabManager = new TabManager(dataManager);
 
   // 4. Initialize the database for a new user (does nothing for returning).
-  dataManager.createWorkspaceSet().then(() => {
+  dataManager.createDefaultWorkspaceSet().then(() => {
     // Restore active workspace.
     tabManager.restore();
 
     // Start listening to tab changes.
     tabManager.subscribeToTabChanges();
   });
+
+  // 5. Establish communication with popup.
 });

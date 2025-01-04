@@ -9,11 +9,11 @@ export default defineConfig({
     permissions: ["contextualIdentities", "cookies"],
     commands: {
       _execute_browser_action: {
-          suggested_key: {
-            default: "Ctrl+Shift+Period"
-          },
-          description: "Open Workspace Switcher"
-        }
-    }
+        suggested_key: {
+          default: "Ctrl+Shift+Comma",
+        },
+        description: "Open Workspace Switcher",
+      },
+    },
   },
 });

@@ -113,7 +113,7 @@ export class DataManager {
    * @remarks
    * This should only be used to help initialize a new user.
    */
-  async createWorkspaceSet() {
+  async createDefaultWorkspaceSet() {
     // Check if workspace sets exist.
     const workspaceSetsResponse = await this.db.queryOnce({ workspaceSet: {} });
 
